@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>保险复利/单利计算器</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">保险产品收益试算</p>
+          <h1>复利与单利计算器</h1>
+        </div>
+      </header>
+
+      <main class="container">
+        <section class="panel form-panel">
+          <div class="form-grid">
+            <label class="field">
+              <span>缴费年限</span>
+              <input id="years" type="number" min="1" step="1" value="10" />
+            </label>
+
+            <label class="field">
+              <span>每年缴费金额（元）</span>
+              <input id="annualPay" type="number" min="0" step="0.01" value="12000" />
+            </label>
+
+            <label class="field">
+              <span>总交保费（元，可为空）</span>
+              <input id="totalPremium" type="number" min="0" step="0.01" placeholder="为空则自动计算" />
+            </label>
+
+            <label class="field">
+              <span>某一年的总收益（元）</span>
+              <input id="selectedYearGain" type="number" min="0" step="0.01" value="15000" />
+            </label>
+
+            <label class="field">
+              <span>该收益对应的年份</span>
+              <input id="selectedYear" type="number" min="1" step="1" value="5" />
+            </label>
+          </div>
+
+          <div class="button-row">
+            <button id="calculateBtn" class="primary-btn">计算</button>
+            <button id="resetBtn" class="secondary-btn" type="button">重置</button>
+          </div>
+        </section>
+
+        <section id="summary" class="summary-box" aria-live="polite"></section>
+
+        <section class="panel table-panel">
+          <div class="table-header">
+            <h2>未来 50 年收益试算表</h2>
+            <p>根据你输入的收益数据，按年化单利和年化复利进行推算。</p>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>年份</th>
+                  <th>年缴费</th>
+                  <th>累计投入</th>
+                  <th>单利累计本息</th>
+                  <th>复利累计本息</th>
+                  <th>年化单利率</th>
+                  <th>年化复利率</th>
+                </tr>
+              </thead>
+              <tbody id="resultBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
