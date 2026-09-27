@@ -3,20 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>保险复利/单利计算器</title>
+    <title>保险收益试算软件</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="page-shell">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">保险产品收益试算</p>
-          <h1>复利与单利计算器</h1>
+        <div class="topbar__text">
+          <p class="eyebrow">Insurance Projection</p>
+          <h1>保险收益试算软件</h1>
         </div>
       </header>
 
       <main class="container">
         <section class="panel form-panel">
+          <div class="section-head">
+            <h2>参数输入</h2>
+          </div>
+
           <div class="form-grid">
             <label class="field">
               <span>缴费年限</span>
@@ -45,8 +49,9 @@
           </div>
 
           <div class="button-row">
-            <button id="calculateBtn" class="primary-btn">计算</button>
+            <button id="calculateBtn" class="primary-btn" type="button">计算</button>
             <button id="resetBtn" class="secondary-btn" type="button">重置</button>
+            <button id="exportBtn" class="ghost-btn" type="button">导出 CSV</button>
           </div>
         </section>
 
@@ -55,7 +60,7 @@
         <section class="panel table-panel">
           <div class="table-header">
             <h2>未来 50 年收益试算表</h2>
-            <p>根据你输入的收益数据，按年化单利和年化复利进行推算。</p>
+            <p>按你提供的收益数据，推算每年的年化单利率和年化复利率。</p>
           </div>
 
           <div class="table-wrap">

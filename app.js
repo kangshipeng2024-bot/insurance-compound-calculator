@@ -18,25 +18,31 @@ const selectedYearInput = document.getElementById('selectedYear');
 const summaryBox = document.getElementById('summary');
 const resultBody = document.getElementById('resultBody');
 
+function getBaseContribution() {
+  const annualPay = Number(annualPayInput.value) || 0;
+  const years = Number(yearsInput.value) || 0;
+  const explicitTotalPremium = Number(totalPremiumInput.value) || 0;
+
+  return explicitTotalPremium > 0 ? explicitTotalPremium : annualPay * years;
+}
+
 function calculate() {
   const years = Number(yearsInput.value) || 0;
   const annualPay = Number(annualPayInput.value) || 0;
-  const explicitTotalPremium = Number(totalPremiumInput.value) || 0;
   const selectedYearGain = Number(selectedYearGainInput.value) || 0;
   let selectedYear = Number(selectedYearInput.value) || 1;
 
   if (years <= 0 || annualPay <= 0) {
-    summaryBox.innerHTML = '请正确填写“缴费年限”和“每年缴费金额”。';
+    summaryBox.innerHTML = '请填写正确的“缴费年限”和“每年缴费金额”。';
     resultBody.innerHTML = '';
     return;
   }
 
   selectedYear = Math.min(Math.max(selectedYear, 1), years);
+  const totalContribution = getBaseContribution();
 
-  const totalContribution = explicitTotalPremium > 0 ? explicitTotalPremium : annualPay * years;
-
-  const simpleInterestAmount = (selectedYearGain - totalContribution) / selectedYear;
-  const simpleAnnualRate = totalContribution > 0 ? simpleInterestAmount / totalContribution : 0;
+  const simpleAnnualAmount = (selectedYearGain - totalContribution) / selectedYear;
+  const simpleAnnualRate = totalContribution > 0 ? simpleAnnualAmount / totalContribution : 0;
 
   const selectedYearEndValue = totalContribution + selectedYearGain;
   const compoundAnnualRate =
@@ -75,8 +81,36 @@ function calculate() {
   `;
 }
 
-document.getElementById('calculateBtn').addEventListener('click', calculate);
+function exportCsv() {
+  const headers = [
+    '年份',
+    '年缴费',
+    '累计投入',
+    '单利累计本息',
+    '复利累计本息',
+    '年化单利率',
+    '年化复利率',
+  ];
 
+  const rows = [headers.join(',')];
+
+  const tbodyRows = resultBody.querySelectorAll('tr');
+  tbodyRows.forEach((row) => {
+    const values = [...row.children].map((cell) => `"${cell.textContent.trim()}"`);
+    rows.push(values.join(','));
+  });
+
+  const csvContent = rows.join('\n');
+  const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'insurance_projection_50_years.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('calculateBtn').addEventListener('click', calculate);
 document.getElementById('resetBtn').addEventListener('click', () => {
   yearsInput.value = 10;
   annualPayInput.value = 12000;
@@ -85,6 +119,12 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   selectedYearInput.value = 5;
   summaryBox.innerHTML = '';
   resultBody.innerHTML = '';
+});
+document.getElementById('exportBtn').addEventListener('click', () => {
+  if (!resultBody.innerHTML.trim()) {
+    calculate();
+  }
+  exportCsv();
 });
 
 calculate();
